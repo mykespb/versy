@@ -74,10 +74,15 @@ def main(args):
             cv   = count_syll(w)
             ep   = eo_picto (cv)
 
+            stat [part] += 1
+
             print (w, part, cv, ep, file=outf)
             print (part[0], end="")
 
-        print ("\nall done.")
+        print ("\n\nall done.\n")
+
+        for k, v in stat.items():
+            print ("{:10s} - {:5d}" .format(k, v))
 
     return 0
 
