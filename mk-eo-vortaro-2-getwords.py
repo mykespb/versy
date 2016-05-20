@@ -22,7 +22,9 @@ EO_VOVELOJ = "aeiou"
 
 EO_NUMS  = "unu du tri kvar kvin ses sep ok naŭ dek cent mil miliono miliardo".split()
 
-stat = Counter()
+part_stat = Counter()       # counter for parts of speech
+avortoj = []                # list of a-vortoj
+total = 0                   # toital number of words
 
 def eo_part (w):
     """ determine part of speech for eo word"""
@@ -39,6 +41,7 @@ def eo_part (w):
         return "e-vorto"
     return "ktp"
 
+
 def count_syll (w):
     """ count syllables in eo word"""
     cv = 0
@@ -46,6 +49,7 @@ def count_syll (w):
         if c in EO_VOVELOJ:
             cv += 1
     return cv
+
 
 def eo_picto (cv):
     """ draw picture of word"""
@@ -56,8 +60,23 @@ def eo_picto (cv):
     ep = "-" * (cv-2) + "+-"
     return ep
 
+
+def make_avorto (w, cv, ep, outf):
+    """ make a-vorto, check if it not exists, add and cout if needed"""
+    global stat, avortoj, total
+
+    av = w[:-1] + "a"
+    if av in avortoj: return
+
+    avortoj += av
+    part_stat ["a-vorto"] += 1
+    total += 1
+    print (av, "a-vorto", cv, ep, file=outf)
+
+
 def main(args):
     """ main task """
+    global part_stat, total
 
     with open (infile, "r", encoding="utf-8") as inf,\
          open (outfile, "w", encoding="utf-8") as outf:
@@ -74,14 +93,18 @@ def main(args):
             cv   = count_syll(w)
             ep   = eo_picto (cv)
 
-            stat [part] += 1
+            part_stat [part] += 1
 
+            if part ==  "o-vorto":
+                make_avorto (w, cv, ep, outf)
+
+            total += 1
             print (w, part, cv, ep, file=outf)
             print (part[0], end="")
 
-        print ("\n\nall done.\n")
+        print ("\n\nall done.\n{} -- words total.\n" .format(total))
 
-        for k, v in stat.items():
+        for k, v in part_stat.items():
             print ("{:10s} - {:5d}" .format(k, v))
 
     return 0
