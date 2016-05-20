@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# mk-eo-vortaro2-getwords.py
-# 2016-05-20 1.3
+# mk-eo-vortaro2-getwords2.py
+# 2016-05-20 2.2.1
 # get list of eo words from text vortaro file eo-vortaro-2.txt
 # and write it to simple text file mk-eo-vortaro-2-list.txt
 #   word part-of-speech
@@ -11,7 +11,7 @@
 from collections import Counter
 
 infile  = "eo-vortaro-2.txt"
-outfile = "eo-vortaro-2-list.txt"
+outfile = "eo-vortaro-2-list2.txt"
 
 ALFA_EO_UP = "ABCĈDEFGĜHĤIJĴKLMNOPRSŜTUŬVZ"
 ALFA_EO_DN = "abcĉdefgĝhĥijĵklmnoprsŝtuŭvz"
