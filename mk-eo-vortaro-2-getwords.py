@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # mk-eo-vortaro2-getwords.py
-# 2016-05-20 1.1
+# 2016-05-20 1.2
 # get list of eo words from text vortaro file eo-vortaro-2.txt
 # and write it to simple text file mk-eo-vortaro-2-list.txt
 #   word part-of-speech
 # where parts are: noun verb adjective pronoun numeral preposition adverd conjunction particle
+# may be launched with mk-eo-001.sh
 
 from collections import Counter
 
@@ -13,7 +14,7 @@ infile  = "eo-vortaro-2.txt"
 outfile = "eo-vortaro-2-list.txt"
 
 ALFA_EO_UP = "ABCĈDEFGĜHĤIJĴKLMNOPRSŜTUŬVZ"
-ALFA_EO_DN = "Abcĉdefgĝhĥijĵklmnoprsŝtuŭvz"
+ALFA_EO_DN = "abcĉdefgĝhĥijĵklmnoprsŝtuŭvz"
 
 ALFA_EN_UP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 ALFA_EN_DN = "abcdefghijklmnopqrstuvwxyz"
