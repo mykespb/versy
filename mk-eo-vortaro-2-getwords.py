@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # mk-eo-vortaro2-getwords.py
-# 2016-05-20 1.2
+# 2016-05-20 1.3
 # get list of eo words from text vortaro file eo-vortaro-2.txt
 # and write it to simple text file mk-eo-vortaro-2-list.txt
 #   word part-of-speech
@@ -24,7 +24,11 @@ EO_VOVELOJ = "aeiou"
 EO_NUMS  = "unu du tri kvar kvin ses sep ok naŭ dek cent mil miliono miliardo".split()
 
 part_stat = Counter()       # counter for parts of speech
+
 avortoj = []                # list of a-vortoj
+ovortoj = []                # list of o-vortoj
+evortoj = []                # list of e-vortoj
+
 total = 0                   # toital number of words
 
 def eo_part (w):
@@ -75,9 +79,39 @@ def make_avorto (w, cv, ep, outf):
     print (av, "a-vorto", cv, ep, file=outf)
 
 
+def make_evorto (w, cv, ep, outf):
+    """ make e-vorto, check if it not exists, add and cout if needed"""
+    global stat, evortoj, total
+
+    av = w[:-1] + "e"
+    if av in evortoj: return
+
+    evortoj += av
+    part_stat ["e-vorto"] += 1
+    total += 1
+    print (av, "e-vorto", cv, ep, file=outf)
+
+
+def make_aoevorto (w, cv, ep, outf):
+    """ make a&o&e-vortoj from verb, check if it not exists, add and cout if needed"""
+    global stat, avortoj, ovortoj, total
+
+    av = w[:-1] + "o"
+    if av in ovortoj: return
+
+    ovortoj += av
+    part_stat ["o-vorto"] += 1
+
+    total += 1
+    print (av, "o-vorto", cv, ep, file=outf)
+
+    make_avorto (av, cv, ep, outf)
+    make_evorto (av, cv, ep, outf)
+
+
 def main(args):
     """ main task """
-    global part_stat, total
+    global part_stat, total, evortoj
 
     with open (infile, "r", encoding="utf-8") as inf,\
          open (outfile, "w", encoding="utf-8") as outf:
@@ -98,6 +132,10 @@ def main(args):
 
             if part ==  "o-vorto":
                 make_avorto (w, cv, ep, outf)
+            if part ==  "e-vorto":
+                evortoj += w
+            if part ==  "verbo":
+                make_aoevorto (w, cv, ep, outf)
 
             total += 1
             print (w, part, cv, ep, file=outf)
