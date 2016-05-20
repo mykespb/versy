@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # mk-eo-vortaro2-getwords.py
-# 2016-05-20 1.0
+# 2016-05-20 1.1
 # get list of eo words from text vortaro file eo-vortaro-2.txt
 # and write it to simple text file mk-eo-vortaro-2-list.txt
 #   word part-of-speech
 # where parts are: noun verb adjective pronoun numeral preposition adverd conjunction particle
+
+from collections import Counter
 
 infile  = "eo-vortaro-2.txt"
 outfile = "eo-vortaro-2-list.txt"
@@ -20,6 +22,8 @@ EO_VOVELOJ = "aeiou"
 
 EO_NUMS  = "unu du tri kvar kvin ses sep ok naŭ dek cent mil miliono miliardo".split()
 
+stat = Counter()
+
 def eo_part (w):
     """ determine part of speech for eo word"""
 
@@ -31,7 +35,7 @@ def eo_part (w):
         return "o-vorto"
     if w.endswith("a"):
         return "a-vorto"
-    if w.endswith("e"):
+    if w.endswith("e") or w.endswith("aŭ") or w.endswith("eŭ") :
         return "e-vorto"
     return "ktp"
 
