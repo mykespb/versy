@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# myke mk-xx-proj-struct1.py 2016-05-21 1.1
+# myke mk-xx-proj-struct1.py 2016-05-21 1.2
 # discover structure of the project and draw diagram
 # testign all .sh, .py files
 
@@ -10,6 +10,15 @@ outfile = "mk-xx-proj-struct1.gv"
 
 fout = 0
 lof = 0
+
+ext_run = "py pl par sh csh zsh p".split()
+ext_inf = "txt log jpg png gv ini gif mp3 mp4 sql html htm".split()
+
+color_run = "green"
+color_inf = "yellow"
+
+all_run = set()
+all_inf = set()
 
 def init():
     """ init io """
@@ -50,7 +59,9 @@ def makepy():
 
 def procpy(f):
     """ process 1 .py file"""
+    global all_inf, all_run
     print (f)
+    all_run |= {f}
     with open(f) as fin:
         for l in fin:
             names = getfilenames (l)
@@ -60,10 +71,12 @@ def procpy(f):
                 print ("infile")
                 for name in names:
                     print ('"{}" -> "{}";' .format (name, f), file=fout)
+                    all_inf |= {name}
             if "outfile" in l:
                 print ("outfile")
                 for name in names:
                     print ('"{}" -> "{}";' .format (f, name), file=fout)
+                    all_inf |= {name}
 
 
 def getfilenames (nomo, ext=""):
@@ -79,6 +92,14 @@ def getfilenames (nomo, ext=""):
 
 def finish():
     """ close all """
+
+    print ("all_run = ", all_run)
+    print ("all_inf = ", all_inf)
+    for f in all_run:
+        print ('"{}" [style=filled color={}]' .format(f, color_run), file=fout)
+    for f in all_inf:
+        print ('"{}" [style=filled color={}]' .format(f, color_inf), file=fout)
+
     print ("\n}\n", file=fout)
     fout.close()
     print ("finish")
