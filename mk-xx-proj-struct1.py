@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# myke mk-xx-proj-struct1.py 2016-05-21 1.2
+# myke mk-xx-proj-struct1.py 2016-05-21 1.4
 # discover structure of the project and draw diagram
 # testign all .sh, .py files
 
@@ -35,19 +35,23 @@ def init():
 
 def makesh():
     """ make .sh files """
-    pass
-    #~ for f in lof:
-        #~ if f.endswith(".sh"):
-            #~ procsh(f)
+    for f in lof:
+        if f.endswith(".sh"):
+            procsh(f)
 
 
 def procsh(f):
     """ process 1 .sh file"""
-    pass
-    #~ print (f)
-    #~ with open(f) as fin:
-        #~ for l in fin:
-            #~ pass
+    global all_inf, all_run
+    print (f)
+    all_run |= {f}
+    with open(f) as fin:
+        for l in fin:
+            names = getfilenames (l)
+            if names:
+                print ("names:", names)
+                for name in names:
+                    print ('"{}" -> "{}";' .format(f, name), file=fout)
 
 
 def makepy():
@@ -95,6 +99,7 @@ def finish():
 
     print ("all_run = ", all_run)
     print ("all_inf = ", all_inf)
+    print (file=fout)
     for f in all_run:
         print ('"{}" [style=filled color={}]' .format(f, color_run), file=fout)
     for f in all_inf:
@@ -108,7 +113,7 @@ def finish():
 def main(args):
     """ main dispatcher """
     init()
-    #~ makesh()
+    makesh()
     makepy()
     finish()
     return 0
