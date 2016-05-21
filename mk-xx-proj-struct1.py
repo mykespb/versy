@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# myke mk-xx-proj-struct1.py 2016-05-21 0.1
+# myke mk-xx-proj-struct1.py 2016-05-21 1.1
 # discover structure of the project and draw diagram
 # testign all .sh, .py files
 
 import os, re
 
-outfile = "mk-xx-proj-struct1.txt"
+outfile = "mk-xx-proj-struct1.gv"
 
 fout = 0
 lof = 0
@@ -18,7 +18,7 @@ def init():
 
     fout = open (outfile, "w", encoding="utf8")
 
-    print ("digraf G {\n", file=fout)
+    print ("digraph G {\n", file=fout)
 
     lof = [x.name for x in os.scandir(".")]
     print (lof)
