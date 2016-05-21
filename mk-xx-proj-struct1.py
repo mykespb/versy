@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# myke mk-xx-proj-struct.py 2016-05-21 0.1
+# myke mk-xx-proj-struct1.py 2016-05-21 0.1
 # discover structure of the project and draw diagram
 # testign all .sh, .py files
 
-import os
+import os, re
 
 outfile = "mk-xx-proj-struct1.txt"
 
@@ -14,27 +14,31 @@ lof = 0
 def init():
     """ init io """
     global fout, lof
+    print ("init")
 
     fout = open (outfile, "w", encoding="utf8")
 
-    print ("digraf G {", file=fout)
+    print ("digraf G {\n", file=fout)
 
     lof = [x.name for x in os.scandir(".")]
-    #~ print (lof)
+    print (lof)
 
 
 def makesh():
     """ make .sh files """
-    for f in lof:
-        if f.endswith(".sh"):
-            procsh(f)
+    pass
+    #~ for f in lof:
+        #~ if f.endswith(".sh"):
+            #~ procsh(f)
 
 
 def procsh(f):
     """ process 1 .sh file"""
-    with open(f) as fin:
-        for l in fin:
-            pass
+    pass
+    #~ print (f)
+    #~ with open(f) as fin:
+        #~ for l in fin:
+            #~ pass
 
 
 def makepy():
@@ -46,30 +50,38 @@ def makepy():
 
 def procpy(f):
     """ process 1 .py file"""
+    print (f)
     with open(f) as fin:
         for l in fin:
-            names = getfilenames(l, ".py")
+            names = getfilenames (l)
+            if names:
+                print ("names:", names)
             if "infile" in l:
+                print ("infile")
                 for name in names:
                     print ('"{}" -> "{}";' .format (name, f), file=fout)
             if "outfile" in l:
+                print ("outfile")
                 for name in names:
                     print ('"{}" -> "{}";' .format (f, name), file=fout)
 
 
-def getfilenames (nomo, ext):
+def getfilenames (nomo, ext=""):
     """ find filenames of type ext in string nomo and give list of them"""
-    lout = []
-    if ext ne "" and not ext in nomo:
-        return lout   # nothign to search, exit
 
-    # re in nomo for filename... ext
+    res = re.findall (r"([-_a-zA-Z0-9\.]+\.[a-zA-Z0-9]+)", nomo)
+    if ext != "":
+        res = [x for x in res if ext in x and x != ext and x in lof]
+    else:
+        res = [x for x in res if x in lof]
+    return res
 
 
 def finish():
     """ close all """
     print ("\n}\n", file=fout)
     fout.close()
+    print ("finish")
 
 
 def main(args):
