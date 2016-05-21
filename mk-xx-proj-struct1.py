@@ -7,20 +7,16 @@
 import os
 
 outfile = "mk-xx-proj-struct1.txt"
-logfile = "mk-xx-proj-struct1.log"
 
 fout = 0
-flog = 0
 lof = 0
 
 def init():
     """ init io """
-    global fout, flog, lof
+    global fout, lof
 
     fout = open (outfile, "w", encoding="utf8")
-    flog = open (logfile, "w", encoding="utf8")
 
-    print ("started init", file=flog)
     print ("digraf G {", file=fout)
 
     lof = [x.name for x in os.scandir(".")]
@@ -36,7 +32,6 @@ def makesh():
 
 def procsh(f):
     """ process 1 .sh file"""
-    print (f, file=flog)
     with open(f) as fin:
         for l in fin:
             pass
@@ -51,17 +46,15 @@ def makepy():
 
 def procpy(f):
     """ process 1 .py file"""
-    print (f, file=flog)
     with open(f) as fin:
         for l in fin:
+            names = getfilenames(l, ".py")
             if "infile" in l:
-                names = getfilenames(l, ".py")
                 for name in names:
-                    print ('"{}" -> "{}";' .format (name, f))
+                    print ('"{}" -> "{}";' .format (name, f), file=fout)
             if "outfile" in l:
-                names = getfilenames(l, ".py")
                 for name in names:
-                    print ('"{}" -> "{}";' .format (f, name))
+                    print ('"{}" -> "{}";' .format (f, name), file=fout)
 
 
 def getfilenames (nomo, ext):
@@ -76,9 +69,7 @@ def getfilenames (nomo, ext):
 def finish():
     """ close all """
     print ("\n}\n", file=fout)
-    print ("finished.", file=flog)
     fout.close()
-    flog.close()
 
 
 def main(args):

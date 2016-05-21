@@ -1,7 +1,7 @@
 Ход работы
 =====================================
 
-2016-05-21 1.2
+2016-05-21 1.3
 
 Мастерская ЛШЮП-2016
 "Вирши, или Разговор с КОмпьютером о Поэзии"
@@ -64,7 +64,7 @@ mk-eo-vortaro-2-getwords2.py -- .. среднего
 формы: formo : строка
   для A a-vorto
   	,cn case=nominativo
-  	,ca case=akkuzativo
+  	,ca case=akuzativo
   	,ns number=singular
   	,np number=plural  	
   	,do производная от o-vorta
