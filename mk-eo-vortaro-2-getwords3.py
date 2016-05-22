@@ -9,7 +9,7 @@
 
 from collections import Counter
 
-infile  = "eo-vortaro-2-list2.txt"
+infile  = "eo-vortaro-2-list1.txt"
 outfile = "eo-vortaro-2-list3.txt"
 
 ALFA_EO_UP = "ABCĈDEFGĜHĤIJĴKLMNOPRSŜTUŬVZ"
@@ -24,11 +24,13 @@ EO_NUMS  = "unu du tri kvar kvin ses sep ok naŭ dek cent mil miliono miliardo".
 
 part_stat = Counter()       # counter for parts of speech
 
-avortoj = []                # list of a-vortoj
-ovortoj = []                # list of o-vortoj
-evortoj = []                # list of e-vortoj
+avortoj = set()                # list of a-vortoj
+ovortoj = set()                # list of o-vortoj
+evortoj = set()                # list of e-vortoj
 
 total = 0                   # toital number of words
+
+fout = 0
 
 def eo_part (w):
     """ determine part of speech for eo word"""
@@ -65,86 +67,307 @@ def eo_picto (cv):
     return ep
 
 
-def make_avorto (w, cv, ep, outf):
-    """ make a-vorto, check if it not exists, add and cout if needed"""
-    global stat, avortoj, total
-
-    av = w[:-1] + "a"
-    if av in avortoj: return
-
-    avortoj += av
-    part_stat ["a-vorto"] += 1
-    total += 1
-    print (av, "a-vorto", cv, ep, file=outf)
-
-
-def make_evorto (w, cv, ep, outf):
-    """ make e-vorto, check if it not exists, add and cout if needed"""
-    global stat, evortoj, total
-
-    av = w[:-1] + "e"
-    if av in evortoj: return
-
-    evortoj += av
-    part_stat ["e-vorto"] += 1
-    total += 1
-    print (av, "e-vorto", cv, ep, file=outf)
-
-
-def make_aoevorto (w, cv, ep, outf):
-    """ make a&o&e-vortoj from verb, check if it not exists, add and cout if needed"""
-    global stat, avortoj, ovortoj, total
-
-    av = w[:-1] + "o"
-    if av in ovortoj: return
-
-    ovortoj += av
-    part_stat ["o-vorto"] += 1
-
-    total += 1
-    print (av, "o-vorto", cv, ep, file=outf)
-
-    make_avorto (av, cv, ep, outf)
-    make_evorto (av, cv, ep, outf)
-
-
 def main(args):
     """ main task """
-    global part_stat, total, evortoj
+    global part_stat, total, ovortoj, avortoj, evortoj, fout
 
-    with open (infile, "r", encoding="utf-8") as inf,\
-         open (outfile, "w", encoding="utf-8") as outf:
+    with open (infile, "r", encoding="utf-8") as inf:
+
+        fout = open (outfile, "w", encoding="utf-8")
         print ("open OK")
+        print ("#vorto parto spec sillen pikto deriva", file=fout)
 
         for line in inf:
             l = line.strip()
             if len(l) <2 : continue
-            if l.startswith("A B"): continue
 
-            w, desc = l.split(" ", maxsplit=1)
+            vorto, parto, silla, pikto = l.split()
+            root, fin = vorto[:-1], vorto[-1:]
+            print (parto[0], end="")
 
-            part = eo_part(w)
-            cv   = count_syll(w)
-            ep   = eo_picto (cv)
+            # ------------------------------------------o-vortoj
+            if parto == "o-vorto":
+                part_stat["O"] += 1
+                tipa = "O,cn,ns"
+                ovortoj |= {vorto}
+                derive = 1
+                print (vorto, tipa[0], tipa, silla, pikto, 1, file=fout)
 
-            part_stat [part] += 1
+                avorto = root + "a"
+                if avorto not in avortoj:
+                    part_stat["A"] += 1
+                    tipa = "A,cn,ns,do"
+                    avortoj |= {avorto}
+                    derive = 2
+                    silla = count_syll (avorto)
+                    pikto = eo_picto (silla)
+                    print (avorto, tipa[0], tipa, silla, pikto, 2, file=fout)
 
-            if part ==  "o-vorto":
-                make_avorto (w, cv, ep, outf)
-            if part ==  "e-vorto":
-                evortoj += w
-            if part ==  "verbo":
-                make_aoevorto (w, cv, ep, outf)
+                ovorto = root + "eto"
+                if ovorto not in ovortoj:
+                    part_stat["O"] += 1
+                    tipa = "O,cn,ns,do"
+                    ovortoj |= {ovorto}
+                    derive = 2
+                    silla = count_syll (ovorto)
+                    pikto = eo_picto (silla)
+                    print (ovorto, tipa[0], tipa, silla, pikto, 2, file=fout)
 
-            total += 1
-            print (w, part, cv, ep, file=outf)
-            print (part[0], end="")
+                ovorto = root + "ego"
+                if ovorto not in ovortoj:
+                    part_stat["O"] += 1
+                    tipa = "O,cn,ns,do"
+                    ovortoj |= {ovorto}
+                    derive = 2
+                    silla = count_syll (ovorto)
+                    pikto = eo_picto (silla)
+                    print (ovorto, tipa[0], tipa, silla, pikto, 2, file=fout)
 
-        print ("\n\nall done.\n{} -- words total.\n" .format(total))
+            # ------------------------------------------a-vortoj
+            elif parto == "a-vorto":
+                part_stat["A"] += 1
+                tipa = "A,cn,ns,pa"
+                avortoj |= {vorto}
+                derive = 1
+                print (vorto, tipa[0], tipa, silla, pikto, 1, file=fout)
 
+            # ------------------------------------------e-vortoj
+            elif parto == "e-vorto":
+                part_stat["E"] += 1
+                tipa = "E,pe" if fin == "ŭ" else "E,pd"
+                evortoj |= {vorto}
+                derive = 1
+                print (vorto, tipa[0], tipa, silla, pikto, 1, file=fout)
+
+            # ------------------------------------------verboj
+            elif parto == "verbo":
+                part_stat["V"] += 1
+                tipa = "V,fi"
+                derive = 1
+                print (vorto, tipa[0], tipa, silla, pikto, 1, file=fout)
+
+                ovorto = root + "o"
+                if ovorto not in ovortoj:
+                    part_stat["O"] += 1
+                    tipa = "O,cn,ns,dv"
+                    ovortoj |= {ovorto}
+                    derive = 2
+                    silla = count_syll (ovorto)
+                    pikto = eo_picto (silla)
+                    print (ovorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                avorto = root + "a"
+                if avorto not in avortoj:
+                    part_stat["A"] += 1
+                    tipa = "A,cn,ns,dv"
+                    avortoj |= {avorto}
+                    derive = 2
+                    silla = count_syll (avorto)
+                    pikto = eo_picto (silla)
+                    print (avorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                avorto = root + "ita"
+                if avorto not in avortoj:
+                    part_stat["A"] += 1
+                    tipa = "A,cn,ns,pp,dv"
+                    avortoj |= {avorto}
+                    derive = 2
+                    silla = count_syll (avorto)
+                    pikto = eo_picto (silla)
+                    print (avorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                avorto = root + "inta"
+                if avorto not in avortoj:
+                    part_stat["A"] += 1
+                    tipa = "A,cn,ns,pp,dv"
+                    avortoj |= {avorto}
+                    derive = 2
+                    silla = count_syll (avorto)
+                    pikto = eo_picto (silla)
+                    print (avorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                avorto = root + "ata"
+                if avorto not in avortoj:
+                    part_stat["A"] += 1
+                    tipa = "A,cn,ns,pp,dv"
+                    avortoj |= {avorto}
+                    derive = 2
+                    silla = count_syll (avorto)
+                    pikto = eo_picto (silla)
+                    print (avorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                avorto = root + "anta"
+                if avorto not in avortoj:
+                    part_stat["A"] += 1
+                    tipa = "A,cn,ns,pp,dv"
+                    avortoj |= {avorto}
+                    derive = 2
+                    silla = count_syll (avorto)
+                    pikto = eo_picto (silla)
+                    print (avorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                avorto = root + "ota"
+                if avorto not in avortoj:
+                    part_stat["A"] += 1
+                    tipa = "A,cn,ns,pp,dv"
+                    avortoj |= {avorto}
+                    derive = 2
+                    silla = count_syll (avorto)
+                    pikto = eo_picto (silla)
+                    print (avorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                avorto = root + "onta"
+                if avorto not in avortoj:
+                    part_stat["A"] += 1
+                    tipa = "A,cn,ns,pp,dv"
+                    avortoj |= {avorto}
+                    derive = 2
+                    silla = count_syll (avorto)
+                    pikto = eo_picto (silla)
+                    print (avorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                avorto = root + "uta"
+                if avorto not in avortoj:
+                    part_stat["A"] += 1
+                    tipa = "A,cn,ns,pp,dv"
+                    avortoj |= {avorto}
+                    derive = 2
+                    silla = count_syll (avorto)
+                    pikto = eo_picto (silla)
+                    print (avorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                avorto = root + "unta"
+                if avorto not in avortoj:
+                    part_stat["A"] += 1
+                    tipa = "A,cn,ns,pp,dv"
+                    avortoj |= {avorto}
+                    derive = 2
+                    silla = count_syll (avorto)
+                    pikto = eo_picto (silla)
+                    print (avorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                evorto = root + "e"
+                if evorto not in evortoj:
+                    part_stat["E"] += 1
+                    tipa = "E,dv"
+                    avortoj |= {avorto}
+                    derive = 2
+                    silla = count_syll (evorto)
+                    pikto = eo_picto (silla)
+                    print (avorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                evorto = root + "ite"
+                if evorto not in evortoj:
+                    part_stat["E"] += 1
+                    tipa = "E,pp,dv"
+                    evortoj |= {evorto}
+                    derive = 2
+                    silla = count_syll (evorto)
+                    pikto = eo_picto (silla)
+                    print (evorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                evorto = root + "inte"
+                if evorto not in evortoj:
+                    part_stat["E"] += 1
+                    tipa = "E,pp,dv"
+                    evortoj |= {evorto}
+                    derive = 2
+                    silla = count_syll (evorto)
+                    pikto = eo_picto (silla)
+                    print (evorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                evorto = root + "ate"
+                if evorto not in evortoj:
+                    part_stat["E"] += 1
+                    tipa = "E,pp,dv"
+                    evortoj |= {evorto}
+                    derive = 2
+                    silla = count_syll (evorto)
+                    pikto = eo_picto (silla)
+                    print (evorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                evorto = root + "ante"
+                if evorto not in evortoj:
+                    part_stat["E"] += 1
+                    tipa = "E,pp,dv"
+                    evortoj |= {evorto}
+                    derive = 2
+                    silla = count_syll (evorto)
+                    pikto = eo_picto (silla)
+                    print (evorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                evorto = root + "ote"
+                if evorto not in evortoj:
+                    part_stat["E"] += 1
+                    tipa = "E,pp,dv"
+                    evortoj |= {evorto}
+                    derive = 2
+                    silla = count_syll (evorto)
+                    pikto = eo_picto (silla)
+                    print (evorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                evorto = root + "onte"
+                if evorto not in evortoj:
+                    part_stat["E"] += 1
+                    tipa = "E,pp,dv"
+                    evortoj |= {evorto}
+                    derive = 2
+                    silla = count_syll (evorto)
+                    pikto = eo_picto (silla)
+                    print (evorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                evorto = root + "ute"
+                if evorto not in evortoj:
+                    part_stat["E"] += 1
+                    tipa = "E,pp,dv"
+                    evortoj |= {evorto}
+                    derive = 2
+                    silla = count_syll (evorto)
+                    pikto = eo_picto (silla)
+                    print (evorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+                evorto = root + "unte"
+                if evorto not in evortoj:
+                    part_stat["E"] += 1
+                    tipa = "E,pp,dv"
+                    evortoj |= {evorto}
+                    derive = 2
+                    silla = count_syll (evorto)
+                    pikto = eo_picto (silla)
+                    print (evorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+            # ------------------------------------------numeraloj
+            elif parto == "numeralo":
+                part_stat["N"] += 1
+                tipa = "N,cn,pc"
+                derive = 1
+                print (vorto, tipa[0], tipa, silla, pikto, 1, file=fout)
+
+                avorto = vorto + "a"
+                if avorto not in avortoj:
+                    part_stat["A"] += 1
+                    tipa = "A,cn,ns,pn,dv"
+                    avortoj |= {avorto}
+                    derive = 2
+                    silla = count_syll (avorto)
+                    pikto = eo_picto (silla)
+                    print (avorto, tipa[0], tipa, silla, pikto, 2, file=fout)
+
+            # ------------------------------------------etc
+            elif parto == "etc":
+                part_stat["K"] += 1
+                derive = 1
+                print (vorto, tipa[0], tipa, silla, pikto, 1, file=fout)
+
+            # ------------------------------------------else
+            else:
+                pass
+
+        print ("\nresults:")
         for k, v in part_stat.items():
             print ("{:10s} - {:5d}" .format(k, v))
 
+    fout.close()
     return 0
 
 if __name__ == '__main__':
