@@ -14,6 +14,9 @@ txt2 = "Tri vortoj plaĉis al mi."
 finame = "espero.txt"
 
 txt3 = open(finame).read().split(".")
+# improve splitter:  . ! ? ...
+# but not mr. inc. etc etc
+# maybe better splitter to be used
 
 txts = [txt1, txt2]
 #~ txts = txt3
