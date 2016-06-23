@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # mk-eo-tools.py
-# 2016-06-23 1.1
+# 2016-06-24 1.5
 # toolbase for SSYP-2016 eo
 
 #~ import re
@@ -26,16 +26,23 @@ EO_ART = ["la"]
 
 EO_VERBFIN = "i is as os us u".split()
 
-EO_PREP = "al apud ĉe ĉirkaŭ da de dum en el ekster for inter krom kun per por post preter pri sen sub super sur tra trans".split()
+EO_PREP = "al apud ĉe ĉirkaŭ da de dum en el ekster for inter krom kun per pli plej por post preter pri sen sub super sur tra trans".split()
 
-EO_UNIO = "kaj se sed aŭ ju nek des".split()
+EO_UNIO = "ne kaj se sed aŭ ju nek des".split()
 
 EO_PREFIX = "eks dis mal mis ek re fi bo ge pra antaŭ kontraŭ".split()
+
+EO_PNF = "ĉiu kiu tiu neniu aliu".split()
 
 EO_STOP = EO_PREP + EO_UNIO + EO_PREFIX + EO_ART
 
 def base_form (w):
-    """ finds base form for given word """
+    """ find base form for given word """
+
+    w = w.lower()
+
+    if w == "l'" or w == "l":
+        return "la"
 
     if w in EO_NUMS or w in EO_PRONOMOJ or w in EO_STOP:
         return w
@@ -52,6 +59,9 @@ def base_form (w):
     if w.endswith("o") or w.endswith("a"):
         return w
 
+    if w in EO_PNF:
+        return w
+
     for e in EO_VERBFIN:
         if w.endswith(e):
             w = w[:-len(e)] + "i"
@@ -60,14 +70,14 @@ def base_form (w):
     return w
 
 def eo_split(f):
-    """ split phrase en eo into words"""
+    """ split phrase into words"""
 
     f1 = f.split()
-    f2 = [eo_strim(x) for x in f1]
+    f2 = [eo_strip(x) for x in f1]
 
     return f2
 
-def eo_strim(w):
+def eo_strip(w):
     """ delete all non-letter chars from word"""
 
     s = ""
