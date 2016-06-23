@@ -14,7 +14,7 @@ EO_VOVELOJ = "aeiou"
 
 EO_NUMS  = "unu du tri kvar kvin ses sep ok naŭ dek cent mil miliono miliardo".split()
 
-EO_PRONOMOJ_S = "mi ci li ŝi ŝhi ĝi onu".split()
+EO_PRONOMOJ_S = "mi ci li ŝi ŝli ĝi oni".split()
 EO_PRONOMOJ_P = "ni vi ili".split()
 EO_PRONOMOJ = EO_PRONOMOJ_P + EO_PRONOMOJ_S
 
