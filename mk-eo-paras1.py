@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # mk-eo-paras1.py
-# 2016-06-24 1.3
+# 2016-06-24 1.4
 # test toolbase for SSYP-2016 eo
 # by finding neibars' words in given text
 
 from mk_eo_tools import *
 
 txt1 = "En la mondon venis nova sento."
-txt2 = "Tri sonoj ŝxajnis al mi."
+txt2 = "Tri vortoj plaĉis al mi."
 
 #~ finame = "normalalingvo.txt"
 finame = "espero.txt"
 
 txt3 = open(finame).read().split(".")
 
-#~ txts = [txt1, txt2]
-txts = txt3
+txts = [txt1, txt2]
+#~ txts = txt3
 
 def test1(frases):
     """ test given phrase """
@@ -58,7 +58,7 @@ def enparu (st):
                 j += 1
                 continue
 
-            print ("pair: ", i, w1, j, w2)
+            print ("paro: ", i, w1, j, w2)
             need = False
 
 
