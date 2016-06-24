@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # mk-eo-vortaro2-getwords3.py
-# 2016-05-22 2.3.1
+# 2016-06-24 2.3.2
 # (C) Mikhail (myke) Kolodin
 # using eo-vortaro-2-list1.txt (sic!) make eo-vortaro-2-list13txt (sic!)
 # with maiimal number of words' variants (only main forms)
@@ -29,7 +29,7 @@ avortoj = set()                # list of a-vortoj
 ovortoj = set()                # list of o-vortoj
 evortoj = set()                # list of e-vortoj
 
-total = 0                   # toital number of words
+total = 0                   # total number of words
 
 fout = 0
 

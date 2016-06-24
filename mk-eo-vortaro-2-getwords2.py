@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # mk-eo-vortaro2-getwords2.py
-# 2016-05-20 2.2.1
+# 2016-06-24 2.2.2
 # (C) Mikhail (myke) Kolodin
 # get list of eo words from text vortaro file eo-vortaro-2.txt
 # and write it to simple text file mk-eo-vortaro-2-list.txt
@@ -30,7 +30,7 @@ avortoj = []                # list of a-vortoj
 ovortoj = []                # list of o-vortoj
 evortoj = []                # list of e-vortoj
 
-total = 0                   # toital number of words
+total = 0                   # total number of words
 
 def eo_part (w):
     """ determine part of speech for eo word"""
