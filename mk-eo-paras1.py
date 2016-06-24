@@ -1,25 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # mk-eo-paras1.py
-# 2016-06-24 1.4
+# 2016-06-24 1.6
+# (C) Mikhail (myke) Kolodin
 # test toolbase for SSYP-2016 eo
 # by finding neibars' words in given text
+
+import collections
+#~ from pprint import pprint as pp
 
 from mk_eo_tools import *
 
 txt1 = "En la mondon venis nova sento."
-txt2 = "Tri vortoj plaĉis al mi."
+txt2 = "Tri vortoj plaĉis al mi en la mondo."
 
-#~ finame = "normalalingvo.txt"
-finame = "espero.txt"
+finame = "normalalingvo.txt"
+#~ finame = "espero.txt"
 
 txt3 = open(finame).read().split(".")
 # improve splitter:  . ! ? ...
 # but not mr. inc. etc etc
 # maybe better splitter to be used
 
-txts = [txt1, txt2]
-#~ txts = txt3
+#~ txts = [txt1, txt2]
+txts = txt3
+
+pred = collections.defaultdict(int)
+post = collections.defaultdict(int)
 
 def test1(frases):
     """ test given phrase """
@@ -62,7 +69,23 @@ def enparu (st):
                 continue
 
             print ("paro: ", i, w1, j, w2)
+            act (w1, w2)
             need = False
+
+def act (w1, w2):
+    """ account pair (w1, w2)"""
+
+    pred [(w1, w2)] += 1
+    post [(w2, w1)] += 1
+
+def showres ():
+    """ show results of test """
+
+    print ("pred = ", pred)
+    print ("post = ", post)
+
+    oftens = sorted (pred, key = lambda l: l[1]) [:10]
+    print ("oftens:", oftens)
 
 
 def main(args):
@@ -72,6 +95,7 @@ def main(args):
     #~ print ("pronomoj: ", EO_PRONOMOJ)
 
     test1 (txts)
+    showres()
 
     return 0
 
