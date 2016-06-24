@@ -81,11 +81,14 @@ def act (w1, w2):
 def showres ():
     """ show results of test """
 
-    print ("pred = ", pred)
-    print ("post = ", post)
+    print ("\npred = ", pred)
+    print ("\npost = ", post)
 
-    oftens = sorted (pred, key = lambda l: l[1]) [:10]
-    print ("oftens:", oftens)
+    #~ oftens = sorted (list(pred), key = lambda l: l[1]) [:10]
+    loft = [(x[0], x[1]) for x in pred.items()]
+    loft.sort (key = lambda l: l[1], reverse = True)
+    print ("\noftens:", loft[:20])
+    #~ print ("oftens:", oftens)
 
 
 def main(args):
