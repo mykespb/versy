@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # mk-eo-vortaro2-getwords3.py
 # 2016-05-22 2.3.1
+# (C) Mikhail (myke) Kolodin
 # using eo-vortaro-2-list1.txt (sic!) make eo-vortaro-2-list13txt (sic!)
 # with maiimal number of words' variants (only main forms)
 # with specificatioons: word part-of-speech,variant

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # mk-eo-vortaro2-getwords2.py
 # 2016-05-20 2.2.1
+# (C) Mikhail (myke) Kolodin
 # get list of eo words from text vortaro file eo-vortaro-2.txt
 # and write it to simple text file mk-eo-vortaro-2-list.txt
 #   word part-of-speech
