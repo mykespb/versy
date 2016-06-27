@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # mk-eo-paras1.py
-# 2016-06-24 1.6
+# 2016-06-28 1.7
 # (C) Mikhail (myke) Kolodin
 # test toolbase for SSYP-2016 eo
 # by finding neibars' words in given text
 
 import collections
+import pickle
 #~ from pprint import pprint as pp
 
 from mk_eo_tools import *
@@ -17,10 +18,13 @@ txt2 = "Tri vortoj plaĉis al mi en la mondo."
 finame = "normalalingvo.txt"
 #~ finame = "espero.txt"
 
+# save to file:
+datapickle = finame + ".pickle"
+
 txt3 = open(finame).read().split(".")
 # improve splitter:  . ! ? ...
 # but not mr. inc. etc etc
-# maybe better splitter to be used
+# maybe better external splitter to be used
 
 #~ txts = [txt1, txt2]
 txts = txt3
@@ -91,6 +95,22 @@ def showres ():
     #~ print ("oftens:", oftens)
 
 
+def savepickles():
+    """ save data outeren """
+
+    try:
+        mass = [(x[0][0], x[0][1], x[1]) for x in pred.items() ]
+    except:
+        pass
+
+    print ("\nmass = ", mass)
+
+    try:
+        with open(datapickle, 'wb') as fp:
+            pickle.dump (mass, fp, pickle.HIGHEST_PROTOCOL)
+    except:
+        print (mass)
+
 def main(args):
     """ main dispatcher """
 
@@ -99,6 +119,7 @@ def main(args):
 
     test1 (txts)
     showres()
+    savepickles()
 
     return 0
 
