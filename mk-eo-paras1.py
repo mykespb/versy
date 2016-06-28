@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # mk-eo-paras1.py
-# 2016-06-28 1.8
+# 2016-06-28 1.10
 # (C) Mikhail (myke) Kolodin
 # test toolbase for SSYP-2016 eo
 # by finding neibars' words in given text
@@ -16,8 +16,11 @@ from mk_eo_tools import *
 txt1 = "En la mondon venis nova sento."
 txt2 = "Tri vortoj plaĉis al mi en la mondo."
 
-finame = "normalalingvo.txt"
-#~ finame = "espero.txt"
+#~ finame = "ojstro.txt"
+#~ finame = "stelship.txt"
+#~ finame = "cutty.txt"
+#~ finame = "normalalingvo.txt"
+finame = "espero.txt"
 
 finame = finame if finame else "none" # :)
 
@@ -110,7 +113,7 @@ def savepickles():
     except:
         pass
 
-    print ("\nmass = ", mass)
+    print ("\nmass = ", mass[:40], "...")
 
     try:
         with open(datapickle, 'wb') as fp:
