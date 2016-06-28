@@ -8,6 +8,7 @@
 
 import collections
 import pickle
+import re
 #~ from pprint import pprint as pp
 
 from mk_eo_tools import *
@@ -23,7 +24,10 @@ finame = finame if finame else "none" # :)
 # save to file:
 datapickle = finame + ".pickle"
 
-txt3 = open(finame).read().split(".")
+#txt3 = open(finame).read().split(".")
+txt3 = open(finame).read()
+txt3 = re.split (r'([^.!?]]+)', txt3)
+
 # improve splitter:  . ! ? ...
 # but not mr. inc. etc etc
 # maybe better external splitter to be used
@@ -102,6 +106,7 @@ def savepickles():
 
     try:
         mass = [(x[0][0], x[0][1], x[1]) for x in pred.items() ]
+        mass.sort (key = lambda l: l[2], reverse = True)
     except:
         pass
 
