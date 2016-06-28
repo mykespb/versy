@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # mk-eo-paras1.py
-# 2016-06-28 1.7
+# 2016-06-28 1.8
 # (C) Mikhail (myke) Kolodin
 # test toolbase for SSYP-2016 eo
 # by finding neibars' words in given text
@@ -17,6 +17,8 @@ txt2 = "Tri vortoj plaĉis al mi en la mondo."
 
 finame = "normalalingvo.txt"
 #~ finame = "espero.txt"
+
+finame = finame if finame else "none" # :)
 
 # save to file:
 datapickle = finame + ".pickle"
