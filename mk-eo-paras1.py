@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # mk-eo-paras1.py
-# 2016-06-29 1.11
+# 2016-06-29 1.12
 # (C) Mikhail (myke) Kolodin
 # test toolbase for SSYP-2016 eo
 # by finding neibars' words in given text
@@ -20,7 +20,8 @@ txt2 = "Tri vortoj plaĉis al mi en la mondo."
 #~ finame = "stelship.txt"
 #~ finame = "cutty.txt"
 #~ finame = "normalalingvo.txt"
-finame = "espero.txt"
+#~ finame = "espero.txt"
+finame = "all.txt"
 
 finame = finame if finame else "none" # :)
 
@@ -100,7 +101,7 @@ def showres ():
     #~ oftens = sorted (list(pred), key = lambda l: l[1]) [:10]
     loft = [(x[0], x[1]) for x in pred.items()]
     loft.sort (key = lambda l: l[1], reverse = True)
-    print ("\noftens:", loft[:20])
+    print ("\noftens:", loft[:100])
     #~ print ("oftens:", oftens)
 
 
@@ -113,7 +114,7 @@ def savepickles():
     except:
         pass
 
-    print ("\nmass = ", mass[:40], "...")
+    print ("\nmass = ", mass[:50], "...")
 
     try:
         with open(datapickle, 'wb') as fp:
